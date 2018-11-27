@@ -44,7 +44,8 @@
             function displayGif() {
 
                 var topic = $(this).attr("data-name");
-                var queryURL = "https://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=cats";
+                var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + topic + "&api_key=dc6zaTOxFJmzC&limit=10";
+                console.log(queryURL);
 
                 // Creating an AJAX call for the specific GIF button being clicked
                 $.ajax({
@@ -52,31 +53,33 @@
                     method: "GET"
                 }).then(function (response) {
 
-                    // Creating a div to hold the movie
-                    var gifDiv = $("<div class='div'>");
+                    console.log(response);
+                    var results = response.data;
 
-                    // Storing the rating data
-                    var rating = response.Rated;
+                    for (var i = 0; i < results.length; i++) {
 
-                    // Creating an element to have the rating displayed
-                    var pOne = $("<p>").text("Rating: " + rating);
+                        // Creating a div to hold the movie
+                        var gifDiv = $("<div>");
+                        gifDiv.addClass("gifDiv");
 
-                    // Displaying the rating
-                    gifDiv.append(pOne);
+                        //pulling rating of gif
+                        var Rating = $("<p>").text("Rating: " + results[i].rating);
+                        gifDiv.append(Rating);
 
-                    // Retrieving the URL for the image
-                    var imgURL = response.data.image_original_url;
 
-                    // Creating an element to hold the image 
-                    var image = $("<img>").attr("src", imgURL);
 
-                    // Appending the image
-                    gifDiv.append(image);
+                        var gifImage = $("<img>");
+                        gifImage.attr("src", results[i].images.fixed_height_small_still.url); // still image stored into src of image
+                        gifImage.attr("data-still", results[i].images.fixed_height_small_still.url); // still image
+                        gifImage.attr("data-animate", results[i].images.fixed_height_small.url); // animated image
+                        gifImage.attr("data-state", "still"); // set the image state
+                        gifImage.addClass("image");
+                        gifDiv.append(gifImage);
 
-                    // Putting the entire movie above the previous movies
-                    $("#gifs-view").prepend(gifDiv);
+                        // Putting the entire movie above the previous movies
+                        $("#gifs-view").prepend(gifDiv);
+                    }
                 });
-
             }
 
             // Function for displaying movie data
@@ -123,6 +126,21 @@
 
             // Calling the renderButtons function to display the initial buttons
             renderButtons();
+
+
+
+            
+            $(document).on("click", ".image", function () {
+                var state = $(this).attr('data-state');
+                if (state == 'still') {
+                    $(this).attr('src', $(this).data('animate'));
+                    $(this).attr('data-state', 'animate');
+                } else {
+                    $(this).attr('src', $(this).data('still'));
+                    $(this).attr('data-state', 'still');
+                }
+            });
+
 
 
 
