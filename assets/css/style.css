@@ -1,0 +1,16 @@
+.gifDiv{
+    /* making the images go in one line rather than block & adding spacing between the images*/
+    float: left;
+    margin: 6px;
+}
+
+.jumbotron {
+    text-align: center;
+    background: url("../images/hqdefault.jpg");
+    font-family: 'VT323', monospace;
+    
+}
+
+body{
+    background: url(../images/gravel.png);
+}

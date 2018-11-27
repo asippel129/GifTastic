@@ -2,6 +2,9 @@
 <html lang="en">
 
 <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+        <link href="https://fonts.googleapis.com/css?family=Abril+Fatface" rel="stylesheet">
     <meta charset="utf-8">
     <title>Favorite Movies</title>
     <style type="text/css">
@@ -16,14 +19,19 @@
 
 <body>
 
+        <div class="jumbotron">
+                <div class="container">
+                    <h1>TV Giftastic!</h1>
+                </div>
+        </div>
+    
     <div class="container">
-        <h1>GifTastic!</h1>
 
         <!-- Rendered Buttons will get Dumped Here  -->
         <div id="buttons-view"></div>
 
         <form id="gif-form">
-            <label for="gif-input">Add a Topic</label>
+            <label for="gif-input">Add a TV Show!</label>
             <input type="text" id="gif-input">
             <br>
 
@@ -34,125 +42,16 @@
         <!-- Gifs will Get Dumped Here -->
         <div id="gifs-view"></div>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script type="text/javascript">
 
-            // Initial array of gifs
-            var gifs = ["Family Guy", "The Office", "Dr. Robot", "Parks and Recreation"];
-
-            // displayMovieInfo function re-renders the HTML to display the appropriate content
-            function displayGif() {
-
-                var topic = $(this).attr("data-name");
-                var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + topic + "&api_key=dc6zaTOxFJmzC&limit=10";
-                console.log(queryURL);
-
-                // Creating an AJAX call for the specific GIF button being clicked
-                $.ajax({
-                    url: queryURL,
-                    method: "GET"
-                }).then(function (response) {
-
-                    console.log(response);
-                    var results = response.data;
-
-                    for (var i = 0; i < results.length; i++) {
-
-                        // Creating a div to hold the movie
-                        var gifDiv = $("<div>");
-                        gifDiv.addClass("gifDiv");
-
-                        //pulling rating of gif
-                        var Rating = $("<p>").text("Rating: " + results[i].rating);
-                        gifDiv.append(Rating);
+        </div>
 
 
+         <!-- jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-                        var gifImage = $("<img>");
-                        gifImage.attr("src", results[i].images.fixed_height_small_still.url); // still image stored into src of image
-                        gifImage.attr("data-still", results[i].images.fixed_height_small_still.url); // still image
-                        gifImage.attr("data-animate", results[i].images.fixed_height_small.url); // animated image
-                        gifImage.attr("data-state", "still"); // set the image state
-                        gifImage.addClass("image");
-                        gifDiv.append(gifImage);
-
-                        // Putting the entire movie above the previous movies
-                        $("#gifs-view").prepend(gifDiv);
-                    }
-                });
-            }
-
-            // Function for displaying movie data
-            function renderButtons() {
-
-                // Deleting the movies prior to adding new movies
-                // (this is necessary otherwise you will have repeat buttons)
-                $("#buttons-view").empty();
-
-                // Looping through the array of movies
-                for (var i = 0; i < gifs.length; i++) {
-
-                    // Then dynamicaly generating buttons for each movie in the array
-                    // This code $("<button>") is all jQuery needs to create the beginning and end tag. (<button></button>)
-                    var a = $("<button>");
-                    // Adding a class of movie-btn to our button
-                    a.addClass("gif-btn");
-                    // Adding a data-attribute
-                    a.attr("data-name", gifs[i]);
-                    // Providing the initial button text
-                    a.text(gifs[i]);
-                    // Adding the button to the buttons-view div
-                    $("#buttons-view").append(a);
-                }
-            }
-
-            // This function handles events where a movie button is clicked
-            $("#add-gif").on("click", function (event) {
-                event.preventDefault();
-                // This line grabs the input from the textbox
-                var topic = $("#gif-input").val().trim();
-
-                // Adding movie from the textbox to our array
-                gifs.push(topic);
-
-                // Calling renderButtons which handles the processing of our movie array
-                renderButtons();
-            });
-
-
-
-            // Adding a click event listener to all elements with a class of "movie-btn"
-            $(document).on("click", ".gif-btn", displayGif);
-
-            // Calling the renderButtons function to display the initial buttons
-            renderButtons();
-
-
-
-            
-            $(document).on("click", ".image", function () {
-                var state = $(this).attr('data-state');
-                if (state == 'still') {
-                    $(this).attr('src', $(this).data('animate'));
-                    $(this).attr('data-state', 'animate');
-                } else {
-                    $(this).attr('src', $(this).data('still'));
-                    $(this).attr('data-state', 'still');
-                }
-            });
-
-
-
-
-
-
-
-
-
-
-
-        </script>
-    </div>
+  <!-- Script -->
+  <script src="assets/java/logic.js"></script>
+   
 </body>
 
 </html>
